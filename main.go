@@ -15,7 +15,7 @@ import (
 var ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.116 Safari/537.36"
 var loginPath = "https://moneyforward.com/users/sign_in"
 
-func renderOutputJson() {
+func newDriver() *agouti.WebDriver {
 	driver := agouti.ChromeDriver(agouti.ChromeOptions("args", []string{
 		"--headless",
 		"--user-agent=" + ua,
@@ -24,7 +24,12 @@ func renderOutputJson() {
 	if err := driver.Start(); err != nil {
 		log.Fatalf("Failed to start driver:%v", err)
 	}
-	defer driver.Stop()
+
+	return driver
+}
+
+func renderOutputJson() {
+	driver := newDriver()
 
 	page, err := driver.NewPage()
 	if err != nil {
