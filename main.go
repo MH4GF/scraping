@@ -28,7 +28,7 @@ func newDriver() *agouti.WebDriver {
 	return driver
 }
 
-func renderOutputJson() {
+func signInPage() *agouti.Page {
 	driver := newDriver()
 
 	page, err := driver.NewPage()
@@ -44,12 +44,23 @@ func renderOutputJson() {
 	password := page.FindByID("sign_in_session_service_password")
 	submit := page.FindByID("login-btn-sumit")
 
-	email.Fill(os.Getenv("SIGN_IN_EMAIL"))
-	password.Fill(os.Getenv("SIGN_IN_PASSWORD"))
+	if err := email.Fill(os.Getenv("SIGN_IN_EMAIL")); err != nil {
+		log.Fatal(err)
+	}
+
+	if err := password.Fill(os.Getenv("SIGN_IN_PASSWORD")); err != nil {
+		log.Fatal(err)
+	}
 
 	if err := submit.Submit(); err != nil {
 		log.Fatalf("Failed to login:%v", err)
 	}
+
+	return page
+}
+
+func renderOutputJson() {
+	page := signInPage()
 
 	// 画面遷移のための時間を待つ
 	time.Sleep(3 * time.Second)
