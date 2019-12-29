@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/joho/godotenv"
 	"log"
+	"os"
 )
 
 func setupEnv() {
@@ -16,5 +17,6 @@ func main() {
 	setupEnv()
 	result := scparing()
 	monthlyTotalTable := newTotalTable(result.Eq(0).Text(), result.Eq(1).Text(), result.Eq(2).Text())
-	monthlyTotalTable.renderingJson()
+	client := newSlackClient(os.Getenv("SLACK_CHANNEL_ID"))
+	client.postMessage(monthlyTotalTable)
 }
