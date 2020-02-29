@@ -1,0 +1,4 @@
+export SIGN_IN_EMAIL=
+export SIGN_IN_PASSWORD=
+export SLACK_APP_TOKEN=
+export SLACK_CHANNEL_ID=

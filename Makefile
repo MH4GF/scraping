@@ -21,7 +21,7 @@ clean: ## remove binary
 	@rm -f bin/$(NAME)
 
 run: ## go run
-	@go run main.go
+	@go run *.go
 
 lint: ## golint
 	@golint $(go list ./... | grep -v /vendor/)
