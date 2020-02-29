@@ -7,7 +7,7 @@ import (
 )
 
 type slackClient struct {
-	client *slack.Client
+	client  *slack.Client
 	channel string
 }
 
@@ -40,9 +40,9 @@ func setFieldsBy(t *totalTable) []slack.AttachmentField {
 
 func (s *slackClient) postMessage(t *totalTable) {
 	attachment := slack.Attachment{
-		Color:      "good",
-		Pretext:    "MoneyForwardの取得結果です",
-		Fields:     setFieldsBy(t),
+		Color:   "good",
+		Pretext: "MoneyForwardの取得結果です",
+		Fields:  setFieldsBy(t),
 	}
 	if _, _, err := s.client.PostMessage(s.channel, slack.MsgOptionAttachments(attachment)); err != nil {
 		fmt.Println(err)
@@ -50,4 +50,3 @@ func (s *slackClient) postMessage(t *totalTable) {
 
 	return
 }
-

@@ -77,4 +77,3 @@ func newDriver() *agouti.WebDriver {
 
 	return driver
 }
-
