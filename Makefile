@@ -11,6 +11,12 @@ help:
 build: clean ## go build
 	@go build -o bin/$(NAME) $(LDFLAGS)
 
+docker-build: ## go build on Docker
+	@docker build ./ -t $(NAME)
+
+docker-run: ## run binary on Docker
+	@docker run -d -p 4444:4444 -v /dev/shm:/dev/shm --rm -it $(NAME)
+
 clean: ## remove binary
 	@rm -f bin/$(NAME)
 
