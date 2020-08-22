@@ -1,0 +1,8 @@
+setup:
+  addons:
+    - plan: scheduler
+build:
+  docker:
+    worker: Dockerfile
+run:
+  worker: ./scraping
