@@ -10,13 +10,10 @@ import (
 )
 
 var ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.116 Safari/537.36"
-var loginPath = "https://moneyforward.com/users/sign_in"
+var lpPath = "https://moneyforward.com/"
 
 func scparing() *goquery.Selection {
 	page := signInPage()
-
-	// 画面遷移のための時間を待つ
-	time.Sleep(3 * time.Second)
 
 	getSource, err := page.HTML()
 	if err != nil {
@@ -42,25 +39,37 @@ func signInPage() *agouti.Page {
 		log.Fatal(err)
 	}
 
-	if err := page.Navigate(loginPath); err != nil {
+	if err := page.Navigate(lpPath); err != nil {
 		log.Fatalf("Failed to navigate:%v", err)
 	}
-
-	email := page.FindByID("sign_in_session_service_email")
-	password := page.FindByID("sign_in_session_service_password")
-	submit := page.FindByID("login-btn-sumit")
-
-	if err := email.Fill(os.Getenv("SIGN_IN_EMAIL")); err != nil {
+	if err := page.FindByLink("ログイン").Click(); err != nil {
 		log.Fatal(err)
 	}
-
-	if err := password.Fill(os.Getenv("SIGN_IN_PASSWORD")); err != nil {
+	time.Sleep(1 * time.Second)
+	if err := page.FindByLink("メールアドレスでログイン").Click(); err != nil {
 		log.Fatal(err)
 	}
+	time.Sleep(1 * time.Second)
 
-	if err := submit.Submit(); err != nil {
+	emailInput := page.FindByName("mfid_user[email]")
+	emailSubmit := page.FindByClass("submitBtn")
+	if err := emailInput.Fill(os.Getenv("SIGN_IN_EMAIL")); err != nil {
+		log.Fatal(err)
+	}
+	if err := emailSubmit.Submit(); err != nil {
 		log.Fatalf("Failed to login:%v", err)
 	}
+	time.Sleep(1 * time.Second)
+
+	passwordInput := page.FindByName("mfid_user[password]")
+	passwordSubmit := page.FindByClass("submitBtn")
+	if err := passwordInput.Fill(os.Getenv("SIGN_IN_PASSWORD")); err != nil {
+		log.Fatal(err)
+	}
+	if err := passwordSubmit.Submit(); err != nil {
+		log.Fatalf("Failed to login:%v", err)
+	}
+	time.Sleep(1 * time.Second)
 
 	return page
 }
